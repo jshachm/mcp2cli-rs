@@ -13,6 +13,29 @@
 
 ## 安装
 
+### 预编译二进制文件（推荐）
+
+从 [GitHub Releases](https://github.com/jshachm/mcp2cli-rs/releases) 下载适合您平台的预编译二进制文件：
+
+| 平台 | 架构 | 下载链接 |
+|------|------|----------|
+| Linux | x86_64 | `mcp2cli-rs-x86_64-unknown-linux-musl.tar.gz` |
+| Linux | ARM64 | `mcp2cli-rs-aarch64-unknown-linux-musl.tar.gz` |
+| macOS | x86_64 | `mcp2cli-rs-x86_64-apple-darwin.tar.gz` |
+| macOS | Apple Silicon | `mcp2cli-rs-aarch64-apple-darwin.tar.gz` |
+| Windows | x86_64 | `mcp2cli-rs-x86_64-pc-windows-gnu.zip` |
+
+**Linux 安装示例：**
+```bash
+# 下载并解压
+curl -LO https://github.com/jshachm/mcp2cli-rs/releases/latest/download/mcp2cli-rs-x86_64-unknown-linux-musl.tar.gz
+tar xzf mcp2cli-rs-x86_64-unknown-linux-musl.tar.gz
+
+# 移动到 PATH
+sudo mv mcp2cli-rs /usr/local/bin/
+sudo chmod +x /usr/local/bin/mcp2cli-rs
+```
+
 ### 从源码构建
 
 ```bash
@@ -22,9 +45,11 @@ cargo build --release
 # 二进制文件位置: target/release/mcp2cli-rs
 ```
 
-### 预编译二进制文件
+### Docker 运行
 
-可以从 [GitHub Releases](https://github.com/jshachm/mcp2cli-rs/releases) 下载预编译的二进制文件。
+```bash
+docker run --rm ghcr.io/jshachm/mcp2cli-rs:latest --help
+```
 
 ## 使用方法
 
@@ -214,6 +239,52 @@ cargo clippy
 - **启动速度**: Rust 版本 < 50ms
 - **依赖**: Rust 版本零运行时依赖
 - **协议支持**: Rust 版本专注于 MCP Streamable HTTP 和 stdio
+
+## 跨平台兼容性
+
+### 支持的平台
+
+✅ **Linux** (x86_64, ARM64)
+- 使用 musl 静态链接，无需 glibc
+- 适用于 Alpine Linux 等轻量级容器
+- 支持 Ubuntu、CentOS、Debian 等主流发行版
+
+✅ **macOS** (Intel, Apple Silicon)
+- 支持 macOS 10.15+
+- 原生 Apple Silicon (M1/M2/M3) 支持
+
+✅ **Windows** (x86_64)
+- Windows 10/11 支持
+- 使用 GNU 工具链构建
+
+### 技术细节
+
+- **TLS 库**: 使用 `rustls`（纯 Rust 实现），不依赖系统 OpenSSL
+- **DNS 解析**: 使用纯 Rust 的 DNS 解析器
+- **进程管理**: 使用 Tokio 跨平台进程 API
+- **文件路径**: 自动处理 Windows/Unix 路径差异
+
+### 构建目标
+
+```bash
+# 查看支持的目标平台
+rustup target list
+
+# Linux x86_64 (musl 静态链接)
+cargo build --release --target x86_64-unknown-linux-musl
+
+# Linux ARM64 (musl 静态链接)
+cargo build --release --target aarch64-unknown-linux-musl
+
+# macOS x86_64
+cargo build --release --target x86_64-apple-darwin
+
+# macOS ARM64
+cargo build --release --target aarch64-apple-darwin
+
+# Windows x86_64
+cargo build --release --target x86_64-pc-windows-gnu
+```
 
 ## 许可证
 
