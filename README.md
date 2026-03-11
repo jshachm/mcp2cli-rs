@@ -1,6 +1,10 @@
 # mcp2cli-rs
 
+[English](README.md) | [中文](README.zh-CN.md)
+
 Minimal, stateless CLI tool for MCP (Model Context Protocol) and OpenAPI.
+
+A Rust implementation of [mcp2cli](https://github.com/knowsuchagency/mcp2cli).
 
 ## Features
 
